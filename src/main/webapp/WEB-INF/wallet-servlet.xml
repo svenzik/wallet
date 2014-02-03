@@ -1,15 +1,56 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!--The application context configuration of the web layer has the following responsibilities:-->
+    <!--1. It enables the annotation driven Spring MVC.-->
+    <!--2. It configures the location of static resources such as CSS files and Javascript files.-->
+    <!--3. It ensures that the static resources are served by the container’s default servlet.-->
+    <!--4. It ensures that the controller classes are found during component scan.-->
+    <!--5. It configures the ExceptionResolver bean.-->
+    <!--6. It configures the ViewResolver bean.-->
+
+    <!-- 1. support the annotated controller methods like @RequestMapping, @ExceptionHandler, @RequestBody/ResponseBody-->
+    <!-- Enables a ConversionService that supports Annotation driven formatting
+         of outputs as well as Annotation driven validation for inputs.-->
+    <!--Registers a RequestMappingHandlerMapping, a RequestMappingHandlerAdapter, and an ExceptionHandlerExceptionResolver-->
+    <!--Spring 3 style type conversion through a ConversionService instance in addition to the
+        JavaBeans PropertyEditors used for Data Binding.-->
+    <!--Support for formatting Number fields using the @NumberFormat annotation through the ConversionService.-->
+    <!--Support for formatting Date, Calendar, Long, and Joda Time fields using the @DateTimeFormat annotation.-->
+    <!--Support for validating @Controller inputs with @Valid, if a JSR-303 Provider is present on the classpath.-->
+    <!--HttpMessageConverter support for @RequestBody method parameters and @ResponseBody method return values from
+        @RequestMapping or @ExceptionHandler methods.-->
+    <!-- use this for Spring Jackson JSON/XML support Jaxb and/or Jackson libraries are present in the class-path-->
+    <!--Otherwise you will get PageNotFound: No mapping found for HTTP request with URI-->
+    <mvc:annotation-driven />
+
+    <!--2.-->
+    <!--<mvc:resources mapping="/static/**" location="/static/"/>-->
+    <!--3.-->
+    <!--<mvc:default-servlet-handler/>-->
+
+    <!--4.-->
+    <!--Scans for annotations:-->
+    <!--Controllers	Controllers are the components that form the 'C' part of the MVC.-->
+    <!--Handler mappings - Handler mappings handle the execution of a list of pre- and post-processors and controllers that will be executed if they match certain criteria (for instance a matching URL specified with the controller)-->
+    <!--View resolvers - View resolvers are components capable of resolving view names to views-->
+    <!--Locale resolver - A locale resolver is a component capable of resolving the locale a client is using, in order to be able to offer internationalized views-->
+    <!--Theme resolver - A theme resolver is capable of resolving themes your web application can use, for example, to offer personalized layouts-->
+    <!--multipart file resolver - A multipart file resolver offers the functionality to process file uploads from HTML forms-->
+    <!--Handler exception resolver(s) - Handler exception resolvers offer functionality to map exceptions to views or implement other more complex exception handling code-->
+    <!--Scans @Component,@Repository,@Service,@Controller,@Autowired annotated classes and publishes them as bean-->
     <context:component-scan base-package="com.playtech.wallet"/>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <import resource="db/persistence-jpa.xml"/>
 
 </beans>

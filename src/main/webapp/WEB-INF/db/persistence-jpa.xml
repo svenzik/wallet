@@ -1,0 +1,87 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+
+
+
+    <!--7. Register repository, entity manager factory and transaction manager-->
+    <jpa:repositories base-package="com.playtech.wallet.domain"/>
+    <jpa:repositories base-package="com.playtech.wallet.repository"/>
+
+    <!--15.5.1 Three options for JPA setup in a Spring environment-->
+    <!--1) LocalEntityManagerFactoryBean - Only use this option in simple deployment environments such as stand-alone applications and integration tests-->
+    <!--   Database definition is in persistence.xml -->
+    <!--<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">-->
+    <!--<property name="persistenceUnitName" value="defaultPersistenceUnit"/>-->
+    <!--</bean>-->
+
+    <!--2) Obtaining an EntityManagerFactory from JNDI-->
+    <!--<beans>-->
+    <!--<jee:jndi-lookup id="myEmf" jndi-name="persistence/myPersistenceUnit"/>-->
+    <!--</beans>-->
+
+    <!--3) LocalContainerEntityManagerFactoryBean-->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="walletDataSource" />
+        <property name="persistenceUnitName" value="defaultPersistenceUnit" />
+        <!--<property name="persistenceUnitManager" ref="persistenceUnitManager" />-->
+        <!--<property name="packagesToScan" value="ee.keskkonnaministeerium.mets.api.domain"/>-->
+        <property name="jpaVendorAdapter" ref="metsDataSourceProvider" />
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="walletDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+        <property name="url" value="jdbc:hsqldb:file:db/hsqlDatabase" />
+        <property name="username" value="sa" />
+        <property name="password" value="" />
+    </bean>
+
+    <bean id="metsDataSourceProvider" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="HSQL" />
+        <!--<property name="databasePlatform" value="org.hibernate.dialect.Oracle10gDialect" />-->
+        <!--<property name="database" value="POSTGRESQL" />-->
+        <!--<property name="database" value="HSQL" />-->
+    </bean>
+
+    <!--Dealing with multiple persistence units - For applications that rely on
+    multiple persistence units locations, stored in various JARS in the classpath -->
+    <!--<bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">-->
+    <!--<property name="persistenceXmlLocations">-->
+    <!--<list>-->
+    <!--<value>org/springframework/orm/jpa/domain/persistence-multi.xml</value>-->
+    <!--<value>classpath:/my/package/**/custom-persistence.xml</value>-->
+    <!--<value>classpath*:META-INF/persistence.xml</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--<property name="dataSources">-->
+    <!--<map>-->
+    <!--<entry key="localDataSource" value-ref="metsDataSource"/>-->
+    <!--<entry key="remoteDataSource" value-ref="remote-db"/>-->
+    <!--</map>-->
+    <!--</property>-->
+    <!--&lt;!&ndash; if no datasource is specified, use this one &ndash;&gt;-->
+    <!--<property name="defaultDataSource" ref="remoteDataSource"/>-->
+    <!--</bean>-->
+
+
+    <!--TRANSACTION-->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>
