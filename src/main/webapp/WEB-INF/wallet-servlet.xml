@@ -53,4 +53,6 @@
 
     <import resource="db/persistence-jpa.xml"/>
 
+    <import resource="aop/performance-timing.xml"/>
+
 </beans>
