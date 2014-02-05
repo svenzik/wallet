@@ -88,6 +88,18 @@
             <version>2.3.0</version>
         </dependency>
 
+        <!--VALIDATION-->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.1.0.Final</version>
+        </dependency>
+
         <!--LOGGING-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -107,6 +119,12 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
 
     </dependencies>
 
