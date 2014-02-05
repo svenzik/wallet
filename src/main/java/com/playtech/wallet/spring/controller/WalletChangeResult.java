@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 
+/**
+ * Outgoing message from controller
+ */
 @XmlRootElement
 public class WalletChangeResult {
 

@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * Incoming message to controller
+ */
 @XmlRootElement
 public class WalletChangeMessage {
 

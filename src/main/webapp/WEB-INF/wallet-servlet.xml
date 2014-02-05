@@ -23,7 +23,7 @@
     <!--Support for formatting Number fields using the @NumberFormat annotation through the ConversionService.-->
     <!--Support for formatting Date, Calendar, Long, and Joda Time fields using the @DateTimeFormat annotation.-->
     <!--Support for validating @Controller inputs with @Valid, if a JSR-303 Provider is present on the classpath.-->
-    <!--HttpMessageConverter support for @RequestBody method parameters and @ResponseBody method return values from
+    <!--HttpMessageConverter support for @RequestBody method methodParameters and @ResponseBody method return values from
         @RequestMapping or @ExceptionHandler methods.-->
     <!-- use this for Spring Jackson JSON/XML support Jaxb and/or Jackson libraries are present in the class-path-->
     <!--Otherwise you will get PageNotFound: No mapping found for HTTP request with URI-->

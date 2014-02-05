@@ -4,6 +4,9 @@ import com.playtech.wallet.domain.Player;
 
 import java.util.List;
 
+/**
+ * Persisting Player domain object
+ */
 public interface PlayerRepository {
 
     /**

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+/**
+ * For persisting Player messages
+ */
 @Service
 public class WalletService {
 
