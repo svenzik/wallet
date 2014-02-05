@@ -1,17 +1,29 @@
 package com.playtech.wallet.repository;
 
 import com.playtech.wallet.domain.Player;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.math.BigInteger;
+import java.util.List;
 
-public interface PlayerRepository extends JpaRepository<Player, BigInteger>{
+public interface PlayerRepository {
 
     /**
      * Search the player by username
      * @param username username of player
-     * @return Player with account info
+     * @return Player with Balance info
      */
-    public Player findByUsername(String username);
+    Player findByUsername(String username);
+
+    /**
+     * Persist data to database
+     * @param player Player instance to persist
+     * @return persisted player
+     */
+    Player save(Player player);
+
+    /**
+     * List all players
+     * @return list of alla players
+     */
+    List<Player> findAll();
 
 }
