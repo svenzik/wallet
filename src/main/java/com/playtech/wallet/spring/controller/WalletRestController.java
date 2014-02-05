@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/wallet")
 public class WalletRestController {
 
+    //for AOP, otherwise not needed
+    protected WalletRestController() {
+    }
+
     @Autowired
-//    public WalletRestController(WalletService walletService) {
-//        this.walletService = walletService;
-//    }
+    public WalletRestController(WalletService walletService) {
+        this.walletService = walletService;
+    }
 
     private WalletService walletService;
 
