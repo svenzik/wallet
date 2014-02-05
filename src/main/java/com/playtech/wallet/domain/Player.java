@@ -1,6 +1,9 @@
 package com.playtech.wallet.domain;
 
+import com.playtech.wallet.domain.exceptions.BalanceLessThenZeroException;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.math.BigDecimal;
@@ -21,9 +24,9 @@ public class Player {
     @Column(length = 100, unique = true)
     private String username;
 
+    @Min(0)
+//    @Access(AccessType.PROPERTY)
     private BigDecimal balance = BigDecimal.ZERO;
-
-//    private AtomicReference<BigDecimal> amountAtomic = new AtomicReference<BigDecimal>(BigDecimal.ZERO);
 
     @Version
     @Column(name = "BALANCE_VERSION")
@@ -42,7 +45,17 @@ public class Player {
 
     public BigDecimal getBalance() {
         return balance;
-//        return amountAtomic.get();
+    }
+
+    /**
+     * For use with JPA @Access(AccessType.PROPERTY)
+     * @param balance Balance, if null then replaced with ZERO
+     */
+    private void setBalance(BigDecimal balance) {
+        if (balance == null){
+            balance = BigDecimal.ZERO;
+        }
+        this.balance = balance;
     }
 
     /**
@@ -51,13 +64,13 @@ public class Player {
      */
     public void changeBalance(BigDecimal delta) {
 
-        this.balance = this.balance.add(delta);
-//        for (;;) {
-//            BigDecimal oldVal = amountAtomic.get();
-//            if (amountAtomic.compareAndSet(oldVal, oldVal.add(delta))) {
-//                return;
-//            }
-//        }
+        //compare result to ZERO
+        if (getBalance().add(delta).compareTo(BigDecimal.ZERO) <= 0 ) {
+            throw new BalanceLessThenZeroException(getBalance(), delta);
+        }
+
+        this.balance = this.getBalance().add(delta);
+
     }
 
     public Long getVersion() {
