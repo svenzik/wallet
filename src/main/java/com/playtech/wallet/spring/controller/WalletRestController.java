@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class WalletRestController {
 
     @Autowired
-    public WalletRestController(WalletService walletService) {
-        this.walletService = walletService;
-    }
+//    public WalletRestController(WalletService walletService) {
+//        this.walletService = walletService;
+//    }
 
     private WalletService walletService;
 
@@ -25,5 +25,6 @@ public class WalletRestController {
     public HttpEntity<WalletChangeResult> modifyWallet(@RequestBody WalletChangeMessage walletChangeMessage) {
         return new ResponseEntity<WalletChangeResult>(walletService.changeBalance(walletChangeMessage), HttpStatus.OK);
     }
+
 
 }

@@ -60,4 +60,15 @@ public class WalletChangeResult {
     public void setTotalBalance(BigDecimal totalBalance) {
         this.totalBalance = totalBalance;
     }
+
+    @Override
+    public String toString() {
+        return "WalletChangeResult{" +
+                "transactionId=" + transactionId +
+                ", errorCode='" + errorCode + '\'' +
+                ", balanceVersion=" + balanceVersion +
+                ", balanceChange=" + balanceChange +
+                ", totalBalance=" + totalBalance +
+                '}';
+    }
 }

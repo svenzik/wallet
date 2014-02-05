@@ -45,4 +45,13 @@ public class WalletChangeMessage {
     public void setBalanceChange(BigDecimal balanceChange) {
         this.balanceChange = balanceChange;
     }
+
+    @Override
+    public String toString() {
+        return "WalletChangeMessage{" +
+                "username='" + username + '\'' +
+                ", transactionId=" + transactionId +
+                ", balanceChange=" + balanceChange +
+                '}';
+    }
 }
