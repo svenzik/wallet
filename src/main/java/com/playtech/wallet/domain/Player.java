@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- * Player domain object, not threadsafe!
+ * Player domain object
  */
 @XmlRootElement
 @Entity
