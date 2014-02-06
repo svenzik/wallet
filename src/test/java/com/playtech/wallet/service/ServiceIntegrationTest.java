@@ -2,6 +2,7 @@ package com.playtech.wallet.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.playtech.wallet.BaseIntegrationTest;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,28 +14,17 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration("file:src/main/webapp/WEB-INF/wallet-servlet.xml")
-public class ServiceIntegrationTest {
+public class ServiceIntegrationTest extends BaseIntegrationTest {
 
     private MockMvc mockMvc;
-
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Autowired
-    protected WebApplicationContext wac;
 
     protected MockMvc getMockMvc() {
         return mockMvc;
     }
 
-    protected WebApplicationContext getWac() {
-        return wac;
-    }
-
     @Before
-    public void setup() {
-        this.mockMvc = webAppContextSetup(this.wac).build();
+    public void setupServiceTest() {
+        this.mockMvc = webAppContextSetup(getWac()).build();
     }
 
     /**
