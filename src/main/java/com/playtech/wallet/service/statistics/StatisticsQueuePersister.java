@@ -32,7 +32,7 @@ public class StatisticsQueuePersister implements NotifyOnMethodExecution {
     private static final Logger logger = LoggerFactory.getLogger(StatisticsQueuePersister.class);
 
     private final String NO_METHODS_EXECUTED = "NO_METHODS_EXECUTED";
-    private final int SECONDS_TO_SLEEP = 6;
+    private final int SECONDS_TO_SLEEP = 60;
 
     private Queue<MethodExecutionInterceptionResults> persistableSharedQueue;
 
@@ -52,7 +52,7 @@ public class StatisticsQueuePersister implements NotifyOnMethodExecution {
      * This is started by Spring every SECONDS_TO_SLEEP
      * If you want it to wait for completion and then start counting time to repeat, then use fixedDelay
      */
-    @Scheduled(fixedRate=SECONDS_TO_SLEEP*1000)
+    @Scheduled(fixedRate=SECONDS_TO_SLEEP*1000, initialDelay = SECONDS_TO_SLEEP*1000)
     public void persistQueue() {
         Collection<MethodExecutionInterceptionResults> c = getAllElementsFromPersistableSharedQueue(persistableSharedQueue);
         logger.info("Persisting statistical data with count: {}", c.size());
