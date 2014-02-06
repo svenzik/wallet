@@ -2,8 +2,8 @@ package com.playtech.wallet.service;
 
 import com.playtech.wallet.domain.Player;
 import com.playtech.wallet.repository.PlayerRepository;
-import com.playtech.wallet.spring.controller.WalletChangeMessage;
-import com.playtech.wallet.spring.controller.WalletChangeResult;
+import com.playtech.wallet.domain.messages.WalletChangeMessage;
+import com.playtech.wallet.domain.messages.WalletChangeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

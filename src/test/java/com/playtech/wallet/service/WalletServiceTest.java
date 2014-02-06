@@ -3,10 +3,11 @@ package com.playtech.wallet.service;
 import com.playtech.wallet.domain.Player;
 import com.playtech.wallet.domain.PlayerFactory;
 import com.playtech.wallet.repository.PlayerRepository;
-import com.playtech.wallet.spring.controller.WalletChangeMessage;
-import com.playtech.wallet.spring.controller.WalletChangeResult;
+import com.playtech.wallet.domain.messages.WalletChangeMessage;
+import com.playtech.wallet.domain.messages.WalletChangeResult;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class WalletServiceTest extends TestCase {
 
 
-    PlayerRepository repository = new PlayerRepository() {
+    private PlayerRepository repository = new PlayerRepository() {
 
         private Player player = PlayerFactory.createNewPlayer("username");
 
@@ -40,12 +41,13 @@ public class WalletServiceTest extends TestCase {
 
     };
 
+    private WalletService walletService = new WalletService(repository);
+
     private Player getUser() {
         return repository.findByUsername("username");
     }
 
-    private WalletService walletService = new WalletService(repository);
-
+    @Test
     public void testChangeBalance() throws Exception {
 
         BigDecimal startBalance = getUser().getBalance();
@@ -68,5 +70,7 @@ public class WalletServiceTest extends TestCase {
         BigDecimal expectedBalance = startBalance.add(balanceChange);
         Assert.assertEquals(expectedBalance, result.getTotalBalance());
     }
+
+
 
 }

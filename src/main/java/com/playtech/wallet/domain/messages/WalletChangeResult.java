@@ -1,4 +1,4 @@
-package com.playtech.wallet.spring.controller;
+package com.playtech.wallet.domain.messages;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;

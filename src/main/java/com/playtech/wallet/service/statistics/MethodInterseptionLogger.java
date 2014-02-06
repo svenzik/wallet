@@ -1,4 +1,4 @@
-package com.playtech.wallet.service;
+package com.playtech.wallet.service.statistics;
 
 import com.playtech.wallet.statistics.MethodExecutionInterceptionResults;
 import com.playtech.wallet.statistics.NotifyOnMethodExecution;

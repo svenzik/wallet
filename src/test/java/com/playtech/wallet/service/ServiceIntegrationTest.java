@@ -24,18 +24,6 @@ public class ServiceIntegrationTest {
     @Autowired
     protected WebApplicationContext wac;
 
-    public static byte[] convertObjectToJsonBytes(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-//        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper.writeValueAsBytes(object);
-    }
-
-    @Before
-    public void setup() {
-        this.mockMvc = webAppContextSetup(this.wac).build();
-    }
-
-
     protected MockMvc getMockMvc() {
         return mockMvc;
     }
@@ -43,4 +31,22 @@ public class ServiceIntegrationTest {
     protected WebApplicationContext getWac() {
         return wac;
     }
+
+    @Before
+    public void setup() {
+        this.mockMvc = webAppContextSetup(this.wac).build();
+    }
+
+    /**
+     * Helper method for testing controller. Serializes POJO to JSON
+     * @param object
+     * @return
+     * @throws JsonProcessingException
+     */
+    public static byte[] convertObjectToJsonBytes(Object object) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsBytes(object);
+    }
+
+
 }

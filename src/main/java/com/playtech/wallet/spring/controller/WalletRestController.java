@@ -1,6 +1,8 @@
 package com.playtech.wallet.spring.controller;
 
 import com.playtech.wallet.service.WalletService;
+import com.playtech.wallet.domain.messages.WalletChangeMessage;
+import com.playtech.wallet.domain.messages.WalletChangeResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

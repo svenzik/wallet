@@ -3,7 +3,7 @@ package com.playtech.wallet.service;
 import com.playtech.wallet.domain.Player;
 import com.playtech.wallet.domain.PlayerFactory;
 import com.playtech.wallet.repository.PlayerRepository;
-import com.playtech.wallet.spring.controller.WalletChangeMessage;
+import com.playtech.wallet.domain.messages.WalletChangeMessage;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
