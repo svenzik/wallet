@@ -7,7 +7,6 @@ import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * Player domain object
@@ -19,7 +18,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQUENCE")
     @SequenceGenerator(name = "SEQUENCE", sequenceName = "PLAYER_ID_SEQ")
-    private BigInteger id;
+    private Long id;
 
     @Column(length = 100, unique = true)
     private String username;
@@ -29,7 +28,7 @@ public class Player {
     private BigDecimal balance = BigDecimal.ZERO;
 
     @Version
-    @Column(name = "BALANCE_VERSION")
+    @Column(name = "balance_version")
     private Long version;
 
 
@@ -65,7 +64,7 @@ public class Player {
     public void changeBalance(BigDecimal delta) {
 
         //compare result to ZERO
-        if (getBalance().add(delta).compareTo(BigDecimal.ZERO) <= 0 ) {
+        if (getBalance().add(delta).compareTo(BigDecimal.ZERO) < 0 ) {
             throw new BalanceLessThenZeroException(getBalance(), delta);
         }
 

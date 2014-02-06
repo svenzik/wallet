@@ -26,7 +26,7 @@ public class TimedMethodStatistics {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQUENCE")
     @SequenceGenerator(name = "SEQUENCE", sequenceName = "TimedMethodStatistics_ID_SEQ")
-    private BigInteger id;
+    private Long id;
 
     private String methodFullName;
     private BigInteger timeLengthSeconds;
