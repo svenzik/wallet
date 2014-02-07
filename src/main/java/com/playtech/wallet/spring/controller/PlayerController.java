@@ -1,7 +1,9 @@
 package com.playtech.wallet.spring.controller;
 
 import com.playtech.wallet.domain.*;
+import com.playtech.wallet.domain.messages.PlayerMessage;
 import com.playtech.wallet.repository.PlayerRepository;
+import com.playtech.wallet.repository.exceptions.PlayerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,9 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
+    protected PlayerController() {
+    }
+
     @Autowired
     public PlayerController(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
@@ -35,25 +40,24 @@ public class PlayerController {
     public HttpEntity<Player> createPlayer(@RequestBody PlayerMessage playerMessage) {
 
         //TODO: move to service
-        Player repositoryPlayer = playerRepository.findByUsername(playerMessage.getUsername());
+        Player repositoryPlayer = null;
 
-        if (repositoryPlayer == null) {
+        try {
+            repositoryPlayer = playerRepository.findByUsername(playerMessage.getUsername());
+        } catch (PlayerNotFoundException e) {
             repositoryPlayer = PlayerFactory.createNewPlayer(playerMessage.getUsername());
             repositoryPlayer = playerRepository.save(repositoryPlayer);
-        } else {
-//            throw new IllegalArgumentException("User allready exists in repository");
-            //zero money
-            repositoryPlayer.changeBalance(BigDecimal.ZERO.subtract(repositoryPlayer.getBalance()));
-            repositoryPlayer = playerRepository.save(repositoryPlayer);
         }
+
+        repositoryPlayer.changeBalance(BigDecimal.ZERO.subtract(repositoryPlayer.getBalance()));
+        repositoryPlayer = playerRepository.save(repositoryPlayer);
 
         return wrap(repositoryPlayer);
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public HttpEntity<Player> get(@PathVariable("username") String username) {
+    public HttpEntity<Player> get(@PathVariable("username") String username) throws PlayerNotFoundException {
         return wrap(playerRepository.findByUsername(username));
-//        return new ResponseEntity<Player>(playerRepository.findByUsername(username), HttpStatus.OK);
     }
 
 
