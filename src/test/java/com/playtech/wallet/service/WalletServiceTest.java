@@ -77,6 +77,11 @@ public class WalletServiceTest {
             this.transactionTable.add(transaction.getTransactionId());
             return transaction;
         }
+
+        @Override
+        public List<PlayerTransaction> findAll() {
+            return null;
+        }
     };
 
     private WalletService walletService = new WalletService(playerRepository, transactionRepository);
