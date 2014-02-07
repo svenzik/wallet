@@ -1,23 +1,18 @@
 package com.playtech.wallet.repository;
 
-import com.playtech.wallet.BaseIntegrationTest;
+import com.playtech.wallet.AbstractBaseIntegrationTest;
 import com.playtech.wallet.domain.Player;
 import com.playtech.wallet.domain.PlayerFactory;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 
-import javax.persistence.OptimisticLockException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class PlayerRepositoryImplIntegrationTest extends BaseIntegrationTest {
+public class PlayerRepositoryImplIntegrationTest extends AbstractBaseIntegrationTest {
 
     private final String PLAYER_NAME_PREFIX = "player-";
     private final AtomicLong usernameCounter = new AtomicLong();

@@ -10,7 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/applicationContext.xml","file:src/main/webapp/WEB-INF/wallet-servlet.xml"})
 @WebAppConfiguration
-public class BaseIntegrationTest {
+public abstract class AbstractBaseIntegrationTest {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
