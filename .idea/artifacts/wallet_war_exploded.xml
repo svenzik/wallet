@@ -46,8 +46,8 @@
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.0.0.GA" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:4.1.0.Final" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.7.2" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" />
-          <element id="library" level="project" name="Maven: log4j:log4j:1.2.16" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.0.13" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.0.13" />
           <element id="library" level="project" name="Maven: com.jayway.jsonpath:json-path-assert:0.9.1" />
           <element id="library" level="project" name="Maven: com.jayway.jsonpath:json-path:0.9.1" />
           <element id="library" level="project" name="Maven: net.minidev:json-smart:1.2" />
