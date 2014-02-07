@@ -4,6 +4,7 @@ import com.playtech.wallet.domain.transactions.PlayerTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -24,6 +25,11 @@ public class PlayerTransactionRepositoryImpl implements PlayerTransactionReposit
     @Override
     public PlayerTransaction save(PlayerTransaction transaction) {
         return crud.save(transaction);
+    }
+
+    @Override
+    public List<PlayerTransaction> findAll() {
+        return crud.findAll();
     }
 
 }

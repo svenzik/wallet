@@ -2,6 +2,7 @@ package com.playtech.wallet.repository;
 
 import com.playtech.wallet.domain.transactions.PlayerTransaction;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,4 +24,9 @@ public interface PlayerTransactionRepository {
      */
     PlayerTransaction save(PlayerTransaction transaction);
 
+    /**
+     * List all transactions
+     * @return All transactions
+     */
+    List<PlayerTransaction> findAll();
 }
