@@ -3,9 +3,7 @@ package com.playtech.wallet.repository;
 import com.playtech.wallet.domain.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.math.BigInteger;
-
-public interface PlayerJpaRepository extends JpaRepository<Player, BigInteger>{
+public interface PlayerJpaRepository extends JpaRepository<Player, Long>{
 
     /**
      * Search the player by username
