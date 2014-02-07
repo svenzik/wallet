@@ -1,5 +1,7 @@
 package com.playtech.wallet.domain.transactions;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ public class PlayerTransaction {
     /**
      * For shared systems a random transaction id is required (not sequential)
      */
+    @Type(type = "org.hibernate.type.UUIDCharType")
     @Column(unique = true, updatable = false)
     private UUID transactionId;
 
