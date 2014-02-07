@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -45,13 +46,35 @@ public class WalletService {
 
         //try to do the transaction
         try {
-
             synchronized (lockForSyncronizing) {
                 Player player = playerRepository.findByUsername(walletChangeMessage.getUsername());
+                //set current values
                 result.setBalanceVersion(player.getVersion());
                 result.setTotalBalance(player.getBalance());
-                mergeToPlayerAndPersist(player, walletChangeMessage);
-            }
+
+                try {
+                    player = mergeToPlayerAndPersist(player, walletChangeMessage);
+                    //set updated values
+                    result.setBalanceVersion(player.getVersion());
+                    result.setTotalBalance(player.getBalance());
+
+                } catch(BalanceLessThenZeroException balanceException) {
+
+                    result.setErrorCode(WalletChangeResultStatus.PLAYER_BALANCE_LESS_THAN_ZERO);
+                    logger.warn(balanceException.getMessage());
+
+                } catch(RepeatingTransaction repeatingTransactionException) {
+
+                    result.setErrorCode(WalletChangeResultStatus.REPEATING_TRANSACTION);
+
+                } catch(OptimisticLockingFailureException lockingException) {
+
+                    result.setErrorCode(WalletChangeResultStatus.OPTIMISTIC_LOCKING_EXCEPTION);
+                    logger.info("Concurrent modification of player on walletChangeMessage {}: {}"
+                            , walletChangeMessage, lockingException.toString());
+                }
+
+            }//syncronized end
 
 
         } catch(PlayerNotFoundException e) {
@@ -59,20 +82,6 @@ public class WalletService {
             result.setErrorCode(WalletChangeResultStatus.NO_SUCH_PLAYER);
             logger.error(e.getMessage());
 
-        } catch(BalanceLessThenZeroException balanceException) {
-
-            result.setErrorCode(WalletChangeResultStatus.PLAYER_BALANCE_LESS_THAN_ZERO);
-            logger.warn(balanceException.getMessage());
-
-        } catch(RepeatingTransaction repeatingTransactionException) {
-
-            result.setErrorCode(WalletChangeResultStatus.REPEATING_TRANSACTION);
-
-        } catch(OptimisticLockingFailureException lockingException) {
-
-            result.setErrorCode(WalletChangeResultStatus.OPTIMISTIC_LOCKING_EXCEPTION);
-            logger.info("Concurrent modification of player on walletChangeMessage {}: {}"
-                    , walletChangeMessage, lockingException.toString());
         }
 
         return result;
@@ -83,6 +92,7 @@ public class WalletService {
      * @param walletChangeMessage WalletChangeMessage to be handeled
      * @return Updated Player or null, if user doesnt exist
      */
+    @Transactional
     private Player mergeToPlayerAndPersist(Player player, WalletChangeMessage walletChangeMessage)
                                             throws PlayerNotFoundException, RepeatingTransaction {
 
