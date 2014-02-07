@@ -4,24 +4,17 @@ import com.playtech.wallet.domain.Player;
 import com.playtech.wallet.domain.PlayerFactory;
 import com.playtech.wallet.repository.PlayerRepository;
 import com.playtech.wallet.domain.messages.WalletChangeMessage;
+import com.playtech.wallet.repository.PlayerTransactionRepository;
 import com.playtech.wallet.repository.exceptions.PlayerNotFoundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,9 +23,10 @@ public class WalletServiceIntegrationTest extends ServiceIntegrationTest {
     @Autowired
     private PlayerRepository playerRepository;
 
-    private final String PLAYER_USERNAME = "WalletServiceIntegrationTest";
+    @Autowired
+    private PlayerTransactionRepository playerTransactionRepository;
 
-    private final static List<Exception> exceptionList = new ArrayList<Exception>();
+    private final String PLAYER_USERNAME = "WalletServiceIntegrationTest";
 
     private final AtomicLong sum = new AtomicLong();
     private final AtomicLong count = new AtomicLong();
@@ -60,83 +54,50 @@ public class WalletServiceIntegrationTest extends ServiceIntegrationTest {
     @Test
     public void testChangeBalance() throws Exception {
 
-        int threads = 100;
         Player playerState = getAndResetPlayerFromRepository();
+        int transactionCountState = playerTransactionRepository.findAll().size();
 
-        ExecutorService taskExecutor = Executors.newFixedThreadPool(threads);
-        for (int i = 0; i < threads; i++) {
-            taskExecutor.execute(new BalanceUpdater());
-        }
+        for (int i = 10; i>=-10; i--) {
 
-        taskExecutor.shutdown();
+            BigDecimal balanceChange = BigDecimal.valueOf(Math.round(Math.random() * 100));
+            UUID transactionId = UUID.randomUUID();
 
-        try {
-            taskExecutor.awaitTermination(120L, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            throw new Exception("Test failed to end in time", e);
-        }
+            WalletChangeMessage message = new WalletChangeMessage();
+            message.setUsername(PLAYER_USERNAME);
+            message.setTransactionId(transactionId);
+            message.setBalanceChange(balanceChange);
 
+            getMockMvc().perform(
+                    post("/wallet")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(convertObjectToJsonBytes(message)))
+                    //                            .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.transactionId").value(transactionId.toString()))
+                    .andExpect(jsonPath("$.errorCode").value("OK"))
+                    .andExpect(jsonPath("$.balanceChange").value(balanceChange.intValue()))
+                    .andReturn();
+
+            sum.addAndGet(balanceChange.longValue());
+            count.getAndIncrement();
+
+          }
 
         Player player = playerRepository.findByUsername(PLAYER_USERNAME);
-        String format = "sum(%s)-count(%s)";
+        String format = "sum(%s)-updateCount(%s)-transactions(%s)";
 
-        String sumAndCountRepository = String.format(format, player.getBalance(), player.getVersion()-playerState.getVersion());
+        String sumAndCountRepository = String.format(format,
+                                                     player.getBalance(),
+                                                     player.getVersion()-playerState.getVersion(),
+                                                     playerTransactionRepository.findAll().size()-transactionCountState);
         String sumAndCountExpected = String.format(format,
                                                    playerState.getBalance().add(BigDecimal.valueOf(sum.get())),
+                                                   count.get(),
                                                    count.get());
 
         assertEquals(sumAndCountExpected, sumAndCountRepository);
 
-        assertEquals(0, exceptionList.size());
-        assertThat(exceptionList, is((List<Exception>)new ArrayList<Exception>()));
-
     }
 
-    private class BalanceUpdater implements Runnable {
-
-        @Override
-        public void run() {
-
-            for (int i = 10; i>=-10; i--) {
-
-                BigDecimal balanceChange = BigDecimal.valueOf(i);
-
-                if (i == 0) {
-                    //with 0 there is no transaction, so lets change that
-                    balanceChange = BigDecimal.valueOf(13);
-                }
-
-                sum.addAndGet(balanceChange.longValue());
-                count.getAndIncrement();
-
-                UUID transactionId = UUID.randomUUID();
-
-                WalletChangeMessage message = new WalletChangeMessage();
-                message.setUsername(PLAYER_USERNAME);
-                message.setTransactionId(transactionId);
-                message.setBalanceChange(balanceChange);
-
-                try {
-
-                  getMockMvc().perform(
-                          post("/wallet")
-                          .contentType(MediaType.APPLICATION_JSON)
-                          .content(convertObjectToJsonBytes(message)))
-//                            .andDo(print())
-                            .andExpect(status().isOk())
-                            .andExpect(jsonPath("$.transactionId").value(transactionId.toString()))
-                            .andExpect(jsonPath("$.errorCode").value("OK"))
-                            .andExpect(jsonPath("$.balanceChange").value(balanceChange.intValue())) //.intValue() otherwise fails
-                            .andReturn();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    exceptionList.add(e);
-                }
-            }
-        }
-
-    }
 
 }
