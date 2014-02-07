@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%thread] %-5level [%logger] - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>server.%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>3</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d [%thread] %-5level [%logger] - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <!--LOGGERS-->
+    <logger name="org.hibernate.SQL">
+        <level value="DEBUG" />
+    </logger>
+
+    <logger name="org.hibernate.pretty.Printer">
+        <level value="DEBUG" />
+    </logger>
+
+    <!--query binded values are shown-->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder">
+        <level value="TRACE" />
+    </logger>
+
+    <!--Query result values are shown-->
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor">
+        <level value="TRACE" />
+    </logger>
+
+    <logger name="org.springframework.orm.jpa.JpaTransactionManager">
+        <level value="DEBUG" />
+    </logger>
+
+    <logger name="org.hibernate">
+        <level value="WARN" />
+    </logger>
+
+
+    <logger name="org.springframework.data.repository.config.RepositoryBeanDefinitionParser">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor">
+        <level value="DEBUG" />
+    </logger>
+
+    <!--Controller logic (resolver+result)-->
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.web.servlet.DispatcherServlet">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.web.context.ContextLoaderListener">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <level value="DEBUG" />
+    </logger>
+
+    <!--#if response not found-->
+    <logger name="org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver">
+        <level value="DEBUG" />
+    </logger>
+
+    <logger name="com.playtech.wallet">
+        <level value="DEBUG" />
+    </logger>
+
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

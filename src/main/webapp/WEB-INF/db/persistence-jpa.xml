@@ -9,40 +9,19 @@
        http://www.springframework.org/schema/tx/spring-tx.xsd
         ">
 
-
-
     <!--7. Register repository, entity manager factory and transaction manager-->
-    <jpa:repositories base-package="com.playtech.wallet.domain"/>
-    <jpa:repositories base-package="com.playtech.wallet.repository"/>
-
-    <!--15.5.1 Three options for JPA setup in a Spring environment-->
-    <!--1) LocalEntityManagerFactoryBean - Only use this option in simple deployment environments such as stand-alone applications and integration tests-->
-    <!--   Database definition is in persistence.xml -->
-    <!--<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">-->
-    <!--<property name="persistenceUnitName" value="defaultPersistenceUnit"/>-->
-    <!--</bean>-->
-
-    <!--2) Obtaining an EntityManagerFactory from JNDI-->
-    <!--<beans>-->
-    <!--<jee:jndi-lookup id="myEmf" jndi-name="persistence/myPersistenceUnit"/>-->
-    <!--</beans>-->
+    <jpa:repositories base-package="com.playtech.wallet"/>
 
     <!--3) LocalContainerEntityManagerFactoryBean-->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="walletDataSource" />
         <property name="persistenceUnitName" value="defaultPersistenceUnit" />
-        <!--<property name="persistenceUnitManager" ref="persistenceUnitManager" />-->
-        <!--<property name="packagesToScan" value="ee.keskkonnaministeerium.mets.api.domain"/>-->
         <property name="jpaVendorAdapter" ref="metsDataSourceProvider" />
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
                 <!--<prop key="hibernate.jdbc.factory_class">org.hibernate.jdbc.NonBatchingBatcherFactory</prop>-->
-                <!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
-                <!--<prop key="hibernate.cache.use_query_cache" >true</prop>-->
-                <!--<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>-->
-                <!--<prop key="hibernate.generate_statistics">true</prop>-->
             </props>
         </property>
     </bean>
@@ -56,31 +35,7 @@
 
     <bean id="metsDataSourceProvider" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="database" value="HSQL" />
-        <!--<property name="databasePlatform" value="org.hibernate.dialect.Oracle10gDialect" />-->
-        <!--<property name="database" value="POSTGRESQL" />-->
-        <!--<property name="database" value="HSQL" />-->
     </bean>
-
-    <!--Dealing with multiple persistence units - For applications that rely on
-    multiple persistence units locations, stored in various JARS in the classpath -->
-    <!--<bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">-->
-    <!--<property name="persistenceXmlLocations">-->
-    <!--<list>-->
-    <!--<value>org/springframework/orm/jpa/domain/persistence-multi.xml</value>-->
-    <!--<value>classpath:/my/package/**/custom-persistence.xml</value>-->
-    <!--<value>classpath*:META-INF/persistence.xml</value>-->
-    <!--</list>-->
-    <!--</property>-->
-    <!--<property name="dataSources">-->
-    <!--<map>-->
-    <!--<entry key="localDataSource" value-ref="metsDataSource"/>-->
-    <!--<entry key="remoteDataSource" value-ref="remote-db"/>-->
-    <!--</map>-->
-    <!--</property>-->
-    <!--&lt;!&ndash; if no datasource is specified, use this one &ndash;&gt;-->
-    <!--<property name="defaultDataSource" ref="remoteDataSource"/>-->
-    <!--</bean>-->
-
 
     <!--TRANSACTION-->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

@@ -1,6 +1,7 @@
 package com.playtech.wallet.repository;
 
 import com.playtech.wallet.domain.Player;
+import com.playtech.wallet.repository.exceptions.PlayerNotFoundException;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface PlayerRepository {
      * @param username username of player
      * @return Player with Balance info
      */
-    Player findByUsername(String username);
+    Player findByUsername(String username) throws PlayerNotFoundException;
 
     /**
      * Persist data to database

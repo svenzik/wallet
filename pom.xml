@@ -10,7 +10,7 @@
     <properties>
         <spring.version>3.2.0.RELEASE</spring.version>
         <slf4j.version>1.6.1</slf4j.version>
-        <hibernate.version>3.6.10.Final</hibernate.version>
+        <hibernate.version>4.3.0.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -57,13 +57,13 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.0.Final</version>
+            <version>1.0.1.Final</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.2.0.RELEASE</version>
+            <version>1.4.3.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -72,9 +72,9 @@
             <version>${hibernate.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-ehcache</artifactId>-->
-            <!--<version>${hibernate.version}</version>-->
+        <!--<groupId>org.hibernate</groupId>-->
+        <!--<artifactId>hibernate-ehcache</artifactId>-->
+        <!--<version>${hibernate.version}</version>-->
         <!--</dependency>-->
 
         <!--HSQL DB-->
@@ -123,9 +123,9 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
         </dependency>
 
         <!--TESTING-->
@@ -157,11 +157,50 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <!-- Separates the unit tests from the integration tests. -->
                 <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
+                    <!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
+                    <skip>true</skip>
+                    <!--<includes>-->
+                    <!--<include>**/*Test.java</include>-->
+                    <!--</includes>-->
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>unit-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Never skip running the tests when the test phase is invoked -->
+                            <skip>false</skip>
+                            <includes>
+                                <!-- Include unit tests within integration-test phase. -->
+                                <include>**/*Test.java</include>
+                            </includes>
+                            <excludes>
+                                <!-- Exclude integration tests within (unit) test phase. -->
+                                <exclude>**/*IntegrationTest.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Never skip running the tests when the integration-test phase is invoked -->
+                            <skip>false</skip>
+                            <includes>
+                                <!-- Include integration tests within integration-test phase. -->
+                                <include>**/*IntegrationTest.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

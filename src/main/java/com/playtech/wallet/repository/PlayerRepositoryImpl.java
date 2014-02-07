@@ -1,6 +1,7 @@
 package com.playtech.wallet.repository;
 
 import com.playtech.wallet.domain.Player;
+import com.playtech.wallet.repository.exceptions.PlayerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,12 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     private PlayerJpaRepository crud;
 
     @Override
-    public Player findByUsername(String username) {
-        return crud.findByUsername(username);
+    public Player findByUsername(String username) throws PlayerNotFoundException {
+        Player p = crud.findByUsername(username);
+        if (p == null) {
+            throw new PlayerNotFoundException(username);
+        }
+        return p;
     }
 
     @Override

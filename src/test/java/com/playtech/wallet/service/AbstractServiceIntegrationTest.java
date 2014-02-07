@@ -2,19 +2,13 @@ package com.playtech.wallet.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.playtech.wallet.BaseIntegrationTest;
+import com.playtech.wallet.AbstractBaseIntegrationTest;
 import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-public class ServiceIntegrationTest extends BaseIntegrationTest {
+public abstract class AbstractServiceIntegrationTest extends AbstractBaseIntegrationTest {
 
     private MockMvc mockMvc;
 

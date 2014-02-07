@@ -11,17 +11,32 @@ import java.util.UUID;
 @XmlRootElement
 public class WalletChangeResult {
 
+    /**
+     * Client settable transaction identifier,
+     * will be used to check if message has allready persisted
+     */
     private UUID transactionId;
 
     /**
-     * Since we are using errorCode, let it be String
+     * Error codes @see WalletChangeResultStatus
      */
-    private String errorCode;
+    private WalletChangeResultStatus errorCode = WalletChangeResultStatus.OK;
 
+    /**
+     * JPA version field for optimistic locking
+     * Can be null, if @see Player does not exist
+     */
     private Long balanceVersion;
 
+    /**
+     * The amount of change in balance. Sent by @see WalletChangeMessage
+     */
     private BigDecimal balanceChange;
 
+
+    /**
+     * @see com.playtech.wallet.domain.Player total balance, can be null if user does not exist
+     */
     private BigDecimal totalBalance;
 
     public UUID getTransactionId() {
@@ -32,11 +47,11 @@ public class WalletChangeResult {
         this.transactionId = transactionId;
     }
 
-    public String getErrorCode() {
+    public WalletChangeResultStatus getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(WalletChangeResultStatus errorCode) {
         this.errorCode = errorCode;
     }
 
