@@ -24,6 +24,10 @@ import java.math.BigDecimal;
 @Service
 public class WalletService {
 
+    //AOP
+    public WalletService() {
+    }
+
     @Autowired
     public WalletService(PlayerRepository playerRepository, PlayerTransactionRepository playerTransactionRepository) {
         this.playerRepository = playerRepository;
@@ -31,9 +35,6 @@ public class WalletService {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(WalletService.class);
-
-    //for syncronizing impl
-    private static final Object lockForSyncronizing = new Object();
 
     private PlayerRepository playerRepository;
     private PlayerTransactionRepository playerTransactionRepository;
@@ -46,35 +47,33 @@ public class WalletService {
 
         //try to do the transaction
         try {
-            synchronized (lockForSyncronizing) {
-                Player player = playerRepository.findByUsername(walletChangeMessage.getUsername());
-                //set current values
+            Player player = playerRepository.findByUsername(walletChangeMessage.getUsername());
+            //set current values
+            result.setBalanceVersion(player.getVersion());
+            result.setTotalBalance(player.getBalance());
+
+            try {
+                player = mergeToPlayerAndPersist(player, walletChangeMessage);
+                //set updated values
                 result.setBalanceVersion(player.getVersion());
                 result.setTotalBalance(player.getBalance());
 
-                try {
-                    player = mergeToPlayerAndPersist(player, walletChangeMessage);
-                    //set updated values
-                    result.setBalanceVersion(player.getVersion());
-                    result.setTotalBalance(player.getBalance());
+            } catch(BalanceLessThenZeroException balanceException) {
 
-                } catch(BalanceLessThenZeroException balanceException) {
+                result.setErrorCode(WalletChangeResultStatus.PLAYER_BALANCE_LESS_THAN_ZERO);
+                logger.warn(balanceException.getMessage());
 
-                    result.setErrorCode(WalletChangeResultStatus.PLAYER_BALANCE_LESS_THAN_ZERO);
-                    logger.warn(balanceException.getMessage());
+            } catch(RepeatingTransaction repeatingTransactionException) {
 
-                } catch(RepeatingTransaction repeatingTransactionException) {
+                result.setErrorCode(WalletChangeResultStatus.REPEATING_TRANSACTION);
 
-                    result.setErrorCode(WalletChangeResultStatus.REPEATING_TRANSACTION);
+            } catch(OptimisticLockingFailureException lockingException) {
 
-                } catch(OptimisticLockingFailureException lockingException) {
+                result.setErrorCode(WalletChangeResultStatus.OPTIMISTIC_LOCKING_EXCEPTION);
+                logger.info("Concurrent modification of player on walletChangeMessage {}: {}"
+                        , walletChangeMessage, lockingException.toString());
+            }
 
-                    result.setErrorCode(WalletChangeResultStatus.OPTIMISTIC_LOCKING_EXCEPTION);
-                    logger.info("Concurrent modification of player on walletChangeMessage {}: {}"
-                            , walletChangeMessage, lockingException.toString());
-                }
-
-            }//syncronized end
 
 
         } catch(PlayerNotFoundException e) {
@@ -90,11 +89,10 @@ public class WalletService {
     /**
      * Persist WalletChangeMessage and transaction to db.
      * @param walletChangeMessage WalletChangeMessage to be handeled
-     * @return Updated Player or null, if user doesnt exist
+     * @return Updated Player or null, if user does not exist
      */
-    @Transactional
     private Player mergeToPlayerAndPersist(Player player, WalletChangeMessage walletChangeMessage)
-                                            throws PlayerNotFoundException, RepeatingTransaction {
+            throws PlayerNotFoundException {
 
         if (playerTransactionRepository.findByTransactionId(walletChangeMessage.getTransactionId()) != null){
             throw new RepeatingTransaction();
@@ -114,6 +112,6 @@ public class WalletService {
     /**
      * If transaction has allready taken place, then this is thrown
      */
-    private class RepeatingTransaction extends Exception { }
+    private class RepeatingTransaction extends RuntimeException { }
 
 }
