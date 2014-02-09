@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * This is only for testing
+ */
 @Controller
 @RequestMapping("/player")
 public class PlayerController {
@@ -39,8 +42,7 @@ public class PlayerController {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     public HttpEntity<Player> createPlayer(@RequestBody PlayerMessage playerMessage) {
 
-        //TODO: move to service
-        Player repositoryPlayer = null;
+        Player repositoryPlayer;
 
         try {
             repositoryPlayer = playerRepository.findByUsername(playerMessage.getUsername());
