@@ -155,6 +155,23 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+
+            <!--Run the project under jetty-->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.0.6.v20130930</version>
+                <configuration>
+                    <httpConnector>
+                        <host>localhost</host>
+                        <port>8080</port>
+                    </httpConnector>
+                    <webApp>
+                        <contextPath>/wallet</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <!-- Separates the unit tests from the integration tests. -->
