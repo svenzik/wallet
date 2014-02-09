@@ -15,9 +15,9 @@ public class TimedMethodStatistics {
     protected TimedMethodStatistics() {
     }
 
-    public TimedMethodStatistics(String methodFullName, BigInteger timeLengthSeconds, BigDecimal minimumRequestTimeMs, BigDecimal maximumRequestTimeMs, BigDecimal averageRequestTimeMs) {
+    public TimedMethodStatistics(String methodFullName, BigInteger pollingTimeLengthSeconds, BigDecimal minimumRequestTimeMs, BigDecimal maximumRequestTimeMs, BigDecimal averageRequestTimeMs) {
         this.methodFullName = methodFullName;
-        this.timeLengthSeconds = timeLengthSeconds;
+        this.pollingTimeLengthSeconds = pollingTimeLengthSeconds;
         this.minimumRequestTimeMs = minimumRequestTimeMs;
         this.maximumRequestTimeMs = maximumRequestTimeMs;
         this.averageRequestTimeMs = averageRequestTimeMs;
@@ -29,7 +29,7 @@ public class TimedMethodStatistics {
     private Long id;
 
     private String methodFullName;
-    private BigInteger timeLengthSeconds;
+    private BigInteger pollingTimeLengthSeconds;
 
     private BigDecimal minimumRequestTimeMs;
     private BigDecimal maximumRequestTimeMs;
@@ -37,4 +37,19 @@ public class TimedMethodStatistics {
 
     private Date created = new Date();
 
+    public String getMethodFullName() {
+        return methodFullName;
+    }
+
+    public BigDecimal getMinimumRequestTimeMs() {
+        return minimumRequestTimeMs;
+    }
+
+    public BigDecimal getMaximumRequestTimeMs() {
+        return maximumRequestTimeMs;
+    }
+
+    public BigDecimal getAverageRequestTimeMs() {
+        return averageRequestTimeMs;
+    }
 }
