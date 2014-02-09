@@ -46,15 +46,18 @@ public class TimingAndParametersStatisticsPersister implements NotifyOnMethodExe
     public void persistQueue() {
 
         for (Map.Entry<String, Queue<MethodExecutionInterceptionResult>> methodStatistics : methodNameBasedMap.entrySet()) {
-            String methodName = methodStatistics.getKey();
 
-            Collection<MethodExecutionInterceptionResult> c =
-                    getAllElementsFromPersistableSharedQueue(methodStatistics.getValue());
+            //only persist methods that have been used
+            if (methodStatistics.getValue().size() > 0) {
+                Collection<MethodExecutionInterceptionResult> c =
+                        getAllElementsFromPersistableSharedQueue(methodStatistics.getValue());
 
-            logger.debug("Persisting statistical data for {} with count: {}", methodName, c.size());
-            TimedMethodStatistics timedMethodStatistics = calculateStatistics(c);
+                String methodName = methodStatistics.getKey();
+                logger.debug("Persisting statistical data for {} with count: {}", methodName, c.size());
+                TimedMethodStatistics timedMethodStatistics = calculateStatistics(c);
 
-            repository.save(timedMethodStatistics);
+                repository.save(timedMethodStatistics);
+            }
         }
 
     }
@@ -131,7 +134,7 @@ public class TimingAndParametersStatisticsPersister implements NotifyOnMethodExe
                         BigInteger.valueOf(SECONDS_TO_SLEEP),
                         BigDecimal.valueOf(methodTimeInNanosecondsMinimum/1000000.0),
                         BigDecimal.valueOf(methodTimeInNanosecondsMaximum/1000000.0),
-                        BigDecimal.valueOf(average/1000000.0)
+                        BigDecimal.valueOf(average / 1000000.0)
                );
     }
 
