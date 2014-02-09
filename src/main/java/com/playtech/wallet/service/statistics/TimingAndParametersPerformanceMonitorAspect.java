@@ -1,14 +1,10 @@
 package com.playtech.wallet.service.statistics;
 
-import com.playtech.wallet.repository.MethodStatisticsRepository;
-import com.playtech.wallet.statistics.MethodExecutionInterceptionResults;
+import com.playtech.wallet.statistics.MethodExecutionInterceptionResult;
 import com.playtech.wallet.statistics.NotifyOnMethodExecution;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,17 +32,17 @@ public class TimingAndParametersPerformanceMonitorAspect {
 
         String methodFullName = joinPoint.getTarget().getClass().getName()+"."+joinPoint.getSignature().getName();
 
-        MethodExecutionInterceptionResults methodExecutionInterceptionResults =
-                new MethodExecutionInterceptionResults(methodFullName, joinPoint.getArgs(), retVal, methodCallDurationInNano);
+        MethodExecutionInterceptionResult methodExecutionInterceptionResult =
+                new MethodExecutionInterceptionResult(methodFullName, joinPoint.getArgs(), retVal, methodCallDurationInNano);
 
-        notifyOnMethodExecution(methodExecutionInterceptionResults);
+        notifyOnMethodExecution(methodExecutionInterceptionResult);
 
         return retVal;
     }
 
-    private void notifyOnMethodExecution(MethodExecutionInterceptionResults methodExecutionInterceptionResults) {
+    private void notifyOnMethodExecution(MethodExecutionInterceptionResult methodExecutionInterceptionResult) {
         for (NotifyOnMethodExecution notifyMe : notifyMeList) {
-            notifyMe.notifyOnMethodExecution(methodExecutionInterceptionResults);
+            notifyMe.notifyOnMethodExecution(methodExecutionInterceptionResult);
         }
     }
 

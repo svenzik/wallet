@@ -1,6 +1,6 @@
 package com.playtech.wallet.service.statistics;
 
-import com.playtech.wallet.statistics.MethodExecutionInterceptionResults;
+import com.playtech.wallet.statistics.MethodExecutionInterceptionResult;
 import com.playtech.wallet.statistics.NotifyOnMethodExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class MethodInterseptionLogger implements NotifyOnMethodExecution {
     }
 
     @Override
-    public void notifyOnMethodExecution(MethodExecutionInterceptionResults methodExecutionInterceptionResults) {
-        logger.info(methodExecutionInterceptionResults.toString());
+    public void notifyOnMethodExecution(MethodExecutionInterceptionResult methodExecutionInterceptionResult) {
+        logger.info(methodExecutionInterceptionResult.toString());
     }
 }

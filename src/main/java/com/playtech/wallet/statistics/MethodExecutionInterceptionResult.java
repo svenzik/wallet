@@ -1,18 +1,16 @@
 package com.playtech.wallet.statistics;
 
 
-import java.util.Arrays;
-
 /**
  * This class helps buid a method inseption object.
  * toString is used for logging and values are used for persisting statistics
  */
-public class MethodExecutionInterceptionResults {
+public class MethodExecutionInterceptionResult {
 
-    public MethodExecutionInterceptionResults(String methodAndClassFullName,
-                                              Object[] methodParameters,
-                                              Object returnValue,
-                                              long methodTimeInNanoseconds) {
+    public MethodExecutionInterceptionResult(String methodAndClassFullName,
+                                             Object[] methodParameters,
+                                             Object returnValue,
+                                             long methodTimeInNanoseconds) {
         this.methodAndClassFullName = methodAndClassFullName;
         this.methodParameters = methodParameters;
         this.returnValue = returnValue;
