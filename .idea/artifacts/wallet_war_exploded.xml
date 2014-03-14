@@ -43,6 +43,11 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.3.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.3.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.3.0" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:2.5.0" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-runtime:1.0.8" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-api:1.0.8" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-collectionschema:1.0.8" />
+          <element id="library" level="project" name="Maven: com.dyuproject.protostuff:protostuff-core:1.0.8" />
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.0.0.GA" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:4.1.0.Final" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.7.2" />

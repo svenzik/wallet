@@ -57,7 +57,9 @@ public class PlayerController {
         return wrap(repositoryPlayer);
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    @RequestMapping(value = "/{username}",
+                    method = RequestMethod.GET,
+                    produces = {"application/json", "application/xml", "application/x-protobuf"})
     public HttpEntity<Player> get(@PathVariable("username") String username) throws PlayerNotFoundException {
         return wrap(playerRepository.findByUsername(username));
     }

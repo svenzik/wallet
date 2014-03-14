@@ -27,7 +27,9 @@ public class WalletRestController {
 
     private WalletService walletService;
 
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
+    @RequestMapping(value = "",
+                    method = RequestMethod.POST,
+                    produces = {"application/json", "application/xml", "application/x-protobuf"})
     public HttpEntity<WalletChangeResult> modifyWallet(@RequestBody WalletChangeMessage walletChangeMessage) {
         return new ResponseEntity<WalletChangeResult>(walletService.changeBalance(walletChangeMessage), HttpStatus.OK);
     }
