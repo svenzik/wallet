@@ -3,6 +3,11 @@
     <output-path>$PROJECT_DIR$/target</output-path>
     <root id="archive" name="wallet.war">
       <element id="artifact" artifact-name="wallet:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="protostuff-spring-web" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

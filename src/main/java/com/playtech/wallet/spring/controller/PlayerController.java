@@ -34,12 +34,14 @@ public class PlayerController {
 
     private PlayerRepository playerRepository;
 
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    @RequestMapping(value = "", method = RequestMethod.GET,
+            produces = {"application/json", "application/xml", "application/x-protobuf", "application/x-protostuff"})
     public HttpEntity<List<Player>> getPlayers() {
         return wrap(playerRepository.findAll());
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
+    @RequestMapping(value = "", method = RequestMethod.POST,
+            produces = {"application/json", "application/xml"})
     public HttpEntity<Player> createPlayer(@RequestBody PlayerMessage playerMessage) {
 
         Player repositoryPlayer;
@@ -59,7 +61,7 @@ public class PlayerController {
 
     @RequestMapping(value = "/{username}",
                     method = RequestMethod.GET,
-                    produces = {"application/json", "application/xml", "application/x-protobuf"})
+                    produces = {"application/json", "application/xml" })
     public HttpEntity<Player> get(@PathVariable("username") String username) throws PlayerNotFoundException {
         return wrap(playerRepository.findByUsername(username));
     }

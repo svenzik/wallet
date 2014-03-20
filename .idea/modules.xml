@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/protostuff-spring-web/protostuff-spring-web.iml" filepath="$PROJECT_DIR$/protostuff-spring-web/protostuff-spring-web.iml" />
       <module fileurl="file:///media/svenzik/Development/Software/Playtech/wallet/wallet.iml" filepath="/media/svenzik/Development/Software/Playtech/wallet/wallet.iml" />
     </modules>
   </component>

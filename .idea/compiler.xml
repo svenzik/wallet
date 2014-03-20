@@ -22,10 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="wallet" />
+        <module name="protostuff-spring-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="protostuff-spring-web" target="1.6" />
       <module name="wallet" target="1.6" />
     </bytecodeTargetLevel>
   </component>
