@@ -31,6 +31,12 @@
         <level value="DEBUG" />
     </logger>
 
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.context.support.AbstractApplicationContext">
+        <level value="DEBUG" />
+    </logger>
 
     <!--SELECT-->
     <!--<logger name="org.hibernate.SQL">-->
@@ -43,15 +49,15 @@
     <!--</logger>-->
 
     <!--Controller logic (resolver+result)-->
-    <!--<logger name="org.springframework.web.servlet.DispatcherServlet">-->
-        <!--<level value="DEBUG" />-->
-    <!--</logger>-->
-    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">-->
-    <!--<level value="DEBUG" />-->
-    <!--</logger>-->
-    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor">-->
-        <!--<level value="DEBUG" />-->
-    <!--&lt;!&ndash;</logger>&ndash;&gt;-->
+    <logger name="org.springframework.web.servlet.DispatcherServlet">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+    <level value="DEBUG" />
+    </logger>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor">
+        <level value="DEBUG" />
+    </logger>
 
     <!--#if response not found-->
     <logger name="org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver">
