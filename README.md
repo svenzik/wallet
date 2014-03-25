@@ -27,4 +27,3 @@ To run this project:
 
 `mvn run:jetty`
 
-
