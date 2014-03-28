@@ -12,7 +12,7 @@
     <artifactId>protostuff-spring-web</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Spring OSGi Bundle</name>
+    <name>protostuff-spring-web</name>
     <url>http://www.springframework.org/osgi</url>
 
     <properties>
@@ -225,24 +225,22 @@
                 <artifactId>com.springsource.bundlor.maven</artifactId>
                 <!--<version>1.0.0.M2</version>-->
                 <version>1.0.0.RELEASE</version>
-                <configuration>
-                    <outputManifest>/tmp/archetype6986057116367976396tmp/META-INF/MANIFEST.MF</outputManifest>
-                    <failOnWarnings>false</failOnWarnings>
-                    <removeNullHeaders>true</removeNullHeaders>
-                    <manifestHeaders><![CDATA[Bundle-ManifestVersion: 2
-Bundle-Name: protostuff-spring-web
-Bundle-SymbolicName: protostuff-spring-web
-Spring-DM-Version: ${pom.version}
-]]></manifestHeaders>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<outputManifest>/tmp/archetype6986057116367976396tmp/META-INF/MANIFEST.MF</outputManifest>-->
+                    <!--<failOnWarnings>false</failOnWarnings>-->
+                    <!--<removeNullHeaders>true</removeNullHeaders>-->
+                    <!--<manifestHeaders><![CDATA[Bundle-ManifestVersion: 2-->
+<!--Bundle-Name: protostuff-spring-web-->
+<!--Bundle-SymbolicName: protostuff-spring-web-->
+<!--Spring-DM-Version: ${pom.version}-->
+<!--]]></manifestHeaders>-->
+                <!--</configuration>-->
                 <!-- generate the manifest automatically during packaging -->
                 <executions>
                     <execution>
-                        <id>bundle-manifest</id>
-                        <phase>package</phase>
+                        <id>bundlor</id>
                         <goals>
-                            <goal>manifest</goal>
-                            <goal>transform</goal>
+                            <goal>bundlor</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -372,6 +370,12 @@ Spring-DM-Version: ${pom.version}
             <name>SpringSource Enterprise Bundle Repository - SpringSource Milestone Releases</name>
             <url>http://repository.springsource.com/maven/bundles/milestone</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>oss.sonatype.org</id>
+            <name>SpringSource Release Proxy</name>
+	    <url>https://oss.sonatype.org/content/repositories/springsource-releases</url>
+        </pluginRepository>
+
     </pluginRepositories>
 
 </project>
