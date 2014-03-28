@@ -2,6 +2,8 @@
 #git rm --cached `git ls-files -i --exclude-from=.gitignore`
 
 /target
+#exclude submodule target dir
+/*/target
 /logs
 *.log
 
