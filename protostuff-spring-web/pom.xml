@@ -181,12 +181,13 @@
              -->
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.osgi</groupId>
-            <artifactId>log4j.osgi</artifactId>
-            <version>1.2.15-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.osgi</groupId>-->
+            <!--<artifactId>log4j.osgi</artifactId>-->
+            <!--<version>1.2.15-SNAPSHOT</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
 
     </dependencies>
 
