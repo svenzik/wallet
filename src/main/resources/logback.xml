@@ -37,8 +37,11 @@
     <logger name="org.springframework.context.support.AbstractApplicationContext">
         <level value="DEBUG" />
     </logger>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <level value="DEBUG" />
+    </logger>
 
-    <!--SELECT-->
+    <!--DB SELECT-->
     <!--<logger name="org.hibernate.SQL">-->
         <!--<level value="DEBUG" />-->
     <!--</logger>-->
@@ -51,9 +54,6 @@
     <!--Controller logic (resolver+result)-->
     <logger name="org.springframework.web.servlet.DispatcherServlet">
         <level value="DEBUG" />
-    </logger>
-    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-    <level value="DEBUG" />
     </logger>
     <logger name="org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor">
         <level value="DEBUG" />
