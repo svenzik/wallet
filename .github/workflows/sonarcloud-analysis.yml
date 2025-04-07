@@ -2,7 +2,7 @@ name: SonarCloud code analysis
 
 on:
   workflow_run:
-    workflows: [ "Maven build" ]
+    workflows: [ Maven build ]
     types: [ completed ]
 
 jobs:
