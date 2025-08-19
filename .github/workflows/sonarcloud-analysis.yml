@@ -1,32 +1,116 @@
 name: SonarCloud code analysis
 
-on:
-  workflow_run:
-    workflows: [ "Maven build" ]
-    types: [ completed ]
+on: [push]
 
 jobs:
   analyze:
     name: Analyze
-    if: >
-      github.repository == 'svenzik/wallet' &&
-      github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
+      - name: Unset CACHE_VERSION
+        shell: powershell
+        run: |
+          Remove-Item Env:CACHE_VERSION -ErrorAction SilentlyContinue
+          Write-Host "CACHE_VERSION has been unset"
+
       - uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
         with:
-          distribution: zulu
-          java-version: 17
+          dotnet-version: 9.0.x # SDK Version to use.
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Test SonarCloud API with Bearer Token
+        shell: powershell
+        run: |
+          $uri = 'https://sonarcloud.io/api/settings/values?component=unknown'
+          $headers = @{
+              'Authorization' = 'Bearer ${{ secrets.SONAR_TOKEN }}'
+          } 
+          try {
+              $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Get -UseBasicParsing
+              Write-Host "HTTP Status Code: $($response.StatusCode)"
+              Write-Host "Token-Expiration: $($response.Headers['SonarQube-Authentication-Token-Expiration'])"
+          }
+          catch {
+              $statusCode = $_.Exception.Response.StatusCode.value__
+              Write-Host "HTTP Status Code: $statusCode"
+              Write-Host "Error: $($_.Exception.Message)"
+              Write-Host "Token-Expiration: $($_.Exception.Response.Headers['SonarQube-Authentication-Token-Expiration'])"
+          }
+          
+      - name: Test SonarCloud API with Basic
+        shell: powershell
+        run: |
+          $uri = 'https://sonarcloud.io/api/settings/values?component=unknown'
+          $token = '${{ secrets.SONAR_TOKEN }}'
+          $encodedCreds = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${token}:"))
+          $headers = @{
+              'Authorization' = "Basic $encodedCreds"
+          } 
+          try {
+              $response = Invoke-WebRequest -Uri $uri -Headers $headers -Method Get -UseBasicParsing
+              Write-Host "HTTP Status Code: $($response.StatusCode)"
+              Write-Host "Token-Expiration: $($response.Headers['SonarQube-Authentication-Token-Expiration'])"
+          }
+          catch {
+              $statusCode = $_.Exception.Response.StatusCode.value__
+              Write-Host "HTTP Status Code: $statusCode"
+              Write-Host "Error: $($_.Exception.Message)"
+              Write-Host "Token-Expiration: $($_.Exception.Response.Headers['SonarQube-Authentication-Token-Expiration'])"
+          }
+
+      - name: Cache SonarQube Cloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarQube Cloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v4
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarQube Cloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-
+          REPO_SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          if ("${{ secrets.SONAR_TOKEN }}" -eq "") {
+            Write-Host "SONAR_TOKEN is missing"
+          } else {
+            Write-Host "SONAR_TOKEN is available -8 (length: $('${{ secrets.SONAR_TOKEN }}'.Length))"
+          }
+          if ("${{ secrets.TEST_ENVIR_SONAR_TOKEN }}" -eq "") {
+            Write-Host "TEST_ENVIR_SONAR_TOKEN is missing"
+          } else {
+            Write-Host "TEST_ENVIR_SONAR_TOKEN is available -8 (length: $('${{ secrets.TEST_ENVIR_SONAR_TOKEN }}'.Length))"
+          }
+          if ("${{ secrets.REPO_SONAR_TOKEN }}" -eq "") {
+            Write-Host "REPO_SONAR_TOKEN is missing"
+          } else {
+            Write-Host "REPO_SONAR_TOKEN is available -8 (length: $('${{ secrets.REPO_SONAR_TOKEN }}'.Length))"
+          }
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"svenzik_wallet" /o:"svenzik" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet build
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
